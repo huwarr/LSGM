@@ -196,12 +196,12 @@ def main(args):
             # generate samples
             n = int(np.floor(np.sqrt(min(64, args.batch_size))))  # cannot generate too many samples on big datasets
             num_samples = n ** 2
-            samples_disc, _, _, _ = generate_samples_vada(dae, diffusion_disc, vae, num_samples,
+            samples_disc, _, _, _ = generate_samples_vada(dae, diffusion_disc, vae, args, num_samples,
                                                              enable_autocast=args.autocast_eval,
                                                              prior_var=args.sigma2_max if args.sde_type == 'vesde' else 1.0)
             samples_disc = utils.tile_image(samples_disc, n)
             writer.add_image('generated_disc', samples_disc, global_step)
-            samples_ode, nfe, _, _ = generate_samples_vada(dae, diffusion_cont, vae, num_samples,
+            samples_ode, nfe, _, _ = generate_samples_vada(dae, diffusion_cont, vae, args, num_samples,
                                                              enable_autocast=args.autocast_eval,
                                                              ode_eps=fast_ode_param['ode_eps'],
                                                              ode_solver_tol=fast_ode_param['ode_solver_tol'],

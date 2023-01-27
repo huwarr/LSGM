@@ -33,7 +33,7 @@ def create_generator_vada(dae, diffusion, vae, batch_size, num_total_samples, en
         yield image.float()
 
 
-def generate_samples_vada(dae, diffusion, vae, num_samples, enable_autocast, ode_eps=None, ode_solver_tol=None,
+def generate_samples_vada(dae, diffusion, vae, args, num_samples, enable_autocast, ode_eps=None, ode_solver_tol=None,
                           ode_sample=False, prior_var=1.0, temp=1.0, vae_temp=1.0, noise=None):
     shape = [dae.num_input_channels, dae.input_size, dae.input_size]
     with torch.no_grad():
@@ -58,9 +58,9 @@ def generate_samples_vada(dae, diffusion, vae, num_samples, enable_autocast, ode
         nfe_torch = torch.tensor(nfe * 1.0, device='cuda')
         sampling_time_torch = torch.tensor(sampling_time * 1.0, device='cuda')
         time_ode_solve_torch = torch.tensor(time_ode_solve * 1.0, device='cuda')
-        utils.average_tensor(nfe_torch, True)
-        utils.average_tensor(sampling_time_torch, True)
-        utils.average_tensor(time_ode_solve_torch, True)
+        utils.average_tensor(nfe_torch, args.distributed)
+        utils.average_tensor(sampling_time_torch, args.distributed)
+        utils.average_tensor(time_ode_solve_torch, args.distributed)
     return image, nfe_torch, time_ode_solve_torch, sampling_time_torch
 
 

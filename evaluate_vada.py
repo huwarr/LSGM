@@ -178,7 +178,7 @@ def main(eval_args):
             logging.info('Starting to sample with ODE framework for average NFE calculation...')
             for i in range(num_iter):
                 # Note that this is just a quick hack... This sampling will be done 50 times on
-                _, nfe, odetime, sampling_time = generate_samples_vada(dae, diffusion_cont, vae, args.batch_size,
+                _, nfe, odetime, sampling_time = generate_samples_vada(dae, diffusion_cont, vae, args, args.batch_size,
                                                                        enable_autocast=args.autocast_eval, ode_eps=eval_args.ode_eps,
                                                                        ode_solver_tol=eval_args.ode_solver_tol, ode_sample=True,
                                                                        prior_var=args.sigma2_max if args.sde_type == 'vesde' else 1.0)
@@ -213,14 +213,14 @@ def main(eval_args):
                 logging.info('Starting to sample with ODE framework...')
                 logging.info('ODE params: ODE eps %f, ODE tol %f', eval_args.ode_eps, eval_args.ode_solver_tol)
                 samples, nfe, odetime, sampling_time = generate_samples_vada(
-                    dae, diffusion_cont, vae, num_samples, enable_autocast=args.autocast_eval,
+                    dae, diffusion_cont, vae, args, num_samples, enable_autocast=args.autocast_eval,
                     ode_eps=eval_args.ode_eps, ode_solver_tol=eval_args.ode_solver_tol, ode_sample=True,
                     prior_var=args.sigma2_max if args.sde_type == 'vesde' else 1.0, temp=eval_args.temp,
                     vae_temp=eval_args.vae_temp)
             else:
                 logging.info('Starting to sample with naive discretization...')
                 samples, nfe, odetime, sampling_time = generate_samples_vada(
-                    dae, diffusion_disc, vae, num_samples, enable_autocast=args.autocast_eval,
+                    dae, diffusion_disc, vae, args, num_samples, enable_autocast=args.autocast_eval,
                     prior_var=args.sigma2_max if args.sde_type == 'vesde' else 1.0, temp=eval_args.temp,
                     vae_temp=eval_args.vae_temp)
 
